@@ -1,9 +1,10 @@
 package com.example.cantinhodecoracao.ViewModels
 
+import androidx.lifecycle.ViewModel
 import com.example.cantinhodecoracao.Models.Login
 import org.json.JSONObject
 
-class LoginViewModel {
+class LoginViewModel: ViewModel() {
     private var keys: JSONObject = JSONObject()
     private var login: Login = Login()
 

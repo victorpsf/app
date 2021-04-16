@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Cantinho De Coracao</string>
+    <string name="original_app_name">CantinhoDeCoracao</string>
 
     <!-- MainActivity -->
     <string name="login">Login</string>

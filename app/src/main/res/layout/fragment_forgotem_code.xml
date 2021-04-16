@@ -52,7 +52,7 @@
             android:layout_height="20dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/forgotem_code_verification_button"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="@string/code_forgotem_button" />

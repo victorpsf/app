@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.cantinhodecoracao.R
+import com.example.cantinhodecoracao.ViewModels.LoginViewModel
 
 class LoginForgotemFragment: Fragment() {
+    private val model: LoginViewModel by activityViewModels()
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -21,10 +25,8 @@ class LoginForgotemFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*
-        view.findViewById<Button>(R.id.button_second).setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        view.findViewById<Button>(R.id.forgotem_button).setOnClickListener {
+            findNavController().navigate(R.id.action_forgotem_to_login)
         }
-         */
     }
 }
