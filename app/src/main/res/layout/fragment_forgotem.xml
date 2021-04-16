@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/senha_login_label"
+            android:gravity="center"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/forgotem_email_view"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_forgotem"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/senha_login_input"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:background="#ffff"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/forgotem_confirm_label"
+            android:gravity="center"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/confirm_password_forgotem"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/forgotem_confirm_input"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:background="#ffff"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/forgotem_button"
+            android:layout_marginTop="16dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_forgotem_button" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

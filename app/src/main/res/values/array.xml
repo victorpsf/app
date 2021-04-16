@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="configuration_protocol_spinner">
-        <item>Http</item>
-        <item>Https</item>
-    </string-array>
-</resources>

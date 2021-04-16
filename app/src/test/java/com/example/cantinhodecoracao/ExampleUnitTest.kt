@@ -1,4 +1,4 @@
-package com.example.cantinho_de_s2
+package com.example.cantinhodecoracao
 
 import org.junit.Test
 

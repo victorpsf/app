@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cantinho_de_s2">
-
+    package="com.example.cantinhodecoracao">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,13 +10,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Cantinho_de_s2"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".ConfigurationActivity"></activity>
+        android:theme="@style/Theme.CantinhoDeCoracao">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Cantinho_de_s2.NoActionBar">
+            android:theme="@style/Theme.CantinhoDeCoracao.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

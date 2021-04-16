@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/forgotem_code_email_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/code_forgotem_label"
+            android:gravity="center" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/forgotem_code_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <EditText
+            android:id="@+id/editTextNumberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/code_forgotem_input"
+            android:gravity="center"
+            android:ems="10"
+            android:inputType="numberSigned" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/code_forgotem_button" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

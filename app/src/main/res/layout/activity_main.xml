@@ -9,14 +9,13 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Cantinho_de_s2.AppBarOverlay">
+        android:theme="@style/Theme.CantinhoDeCoracao.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Cantinho_de_s2.PopupOverlay" />
+            app:popupTheme="@style/Theme.CantinhoDeCoracao.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -1,6 +1,27 @@
 <resources>
-    <string name="app_name">Cantinho de coração</string>
-    <string name="action_settings">Configuração</string>
+    <string name="app_name">Cantinho De Coracao</string>
+
+    <!-- MainActivity -->
+    <string name="login">Login</string>
+    <string name="email_login_label">E-mail</string>
+    <string name="email_login_input">e-mail</string>
+
+    <string name="senha_login_label">Senha</string>
+    <string name="forgotem_confirm_label">Confirmar</string>
+    <string name="forgotem_confirm_input">confirmar</string>
+    <string name="senha_login_input">senha</string>
+
+    <string name="forgotem_login_label"><a href="">esqueci a senha</a></string>
+
+    <string name="back_button">Voltar</string>
+    <string name="login_button">Entrar</string>
+    <string name="forgotem_email_button">Solicitar</string>
+    <string name="code_forgotem_label">Código</string>
+    <string name="code_forgotem_input">código</string>
+    <string name="code_forgotem_button">Verificar</string>
+    <string name="confirm_forgotem_button">Alterar</string>
+
+    <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -9,10 +30,4 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
-    <string name="configuration_protocol">Protocol</string>
-    <string name="configuration_host">Host</string>
-    <string name="configuration_port">Port</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
