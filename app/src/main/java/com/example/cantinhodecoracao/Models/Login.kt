@@ -32,4 +32,16 @@ class Login {
 
         return this
     }
+
+    fun getPropertiesJSON(): JSONObject {
+        var login: JSONObject = JSONObject()
+
+        if (this.email.length > 0) login.put("email", this.email)
+        if (this.senha.length > 0) login.put("senha", this.email)
+        if (this.confirm.length > 0) login.put("confirm", this.confirm)
+        if (this.code > 0) login.put("code", this.code)
+
+        return login;
+    }
+
 }

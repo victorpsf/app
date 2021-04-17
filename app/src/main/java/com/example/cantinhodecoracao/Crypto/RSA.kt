@@ -1,5 +1,6 @@
 package com.example.cantinhodecoracao.Crypto
 
+import android.util.Log
 import com.example.cantinhodecoracao.Util.Convert
 import org.json.JSONObject
 import java.security.KeyPairGenerator

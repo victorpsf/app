@@ -9,8 +9,16 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.cantinhodecoracao.Crypto.Crypto
+import com.example.cantinhodecoracao.Models.Login
 import com.example.cantinhodecoracao.R
+import com.example.cantinhodecoracao.Util.Directory
+import com.example.cantinhodecoracao.Util.Information
+import com.example.cantinhodecoracao.Util.JSONReader
+import com.example.cantinhodecoracao.Util.Validator
 import com.example.cantinhodecoracao.ViewModels.LoginViewModel
+import com.google.android.material.textfield.TextInputEditText
+import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -29,12 +37,42 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        this.setAttributesView(view)
+        this.listen(view)
+    }
+
+    private fun setAttributesView(view: View) {
+        var loginModel: Login = this.model.getLogin()
+
+        view.findViewById<TextInputEditText>(R.id.inputEmail).setText(loginModel.getEmail())
+        view.findViewById<TextInputEditText>(R.id.inputSenha).setText(loginModel.getSenha())
+    }
+
+    private fun listen(view: View) {
         view.findViewById<TextView>(R.id.forgotem_password_view).setOnClickListener {
             findNavController().navigate(R.id.action_login_to_forgotem_email)
         }
 
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
-            // sing-in
+            var email = view.findViewById<TextInputEditText>(R.id.inputEmail).text.toString()
+            var senha = view.findViewById<TextInputEditText>(R.id.inputSenha).text.toString()
+
+            if (!Validator().isValidEmail(email)) {
+                Information()
+                        .setTitle("Error")
+                        .setMessage("E-mail inválido")
+                        .setPositiveButtonLabel("Ok")
+                        .show(this.model.getActivity(), fun (result: JSONObject) {  })
+            } else {
+                var loginModel: Login = this.model.getLogin()
+
+                loginModel.setEmail(email)
+                loginModel.setSenha(Crypto().hash(senha))
+
+                this.model.setLogin(loginModel)
+                        .getActivity()
+                        .singIn(loginModel)
+            }
         }
     }
 }

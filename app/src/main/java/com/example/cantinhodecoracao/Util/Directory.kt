@@ -40,6 +40,19 @@ class Directory {
         }
     }
 
+    fun deleteFile(path: String, fileName: String): Boolean {
+        var file: File = File(this.pathExistsAndCreate(path), File.separator + fileName)
+
+        try {
+            if (!file.exists()) return true
+            file.delete()
+        } catch (error: Exception) {
+            return false
+        }
+
+        return true
+    }
+
     fun readFile(path: String, fileName: String): String {
         var line: String = ""
         var file: File = File(this.pathExistsAndCreate(path), File.separator + fileName)

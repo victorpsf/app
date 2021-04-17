@@ -1,5 +1,7 @@
 package com.example.cantinhodecoracao.Util
 
+import org.json.JSONObject
+
 class Convert {
     fun byteArrayToHex(byteArray: ByteArray): String {
         var hex = StringBuffer(byteArray.size * 2)
@@ -22,4 +24,9 @@ class Convert {
 
         return arrayByte
     }
+
+    fun stringToJSON(string: String): JSONObject {
+        return JSONObject(string)
+    }
+
 }
