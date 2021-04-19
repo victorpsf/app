@@ -1,0 +1,3 @@
+const { Make } = require('squirrel_resource')
+
+Make.build()
