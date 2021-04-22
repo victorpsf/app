@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,17 @@ class LoginForgotemCodeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+    }
+
+    private fun setProperties(view: View) {
+        var login = this.model.getLogin()
+
+        view.findViewById<TextView>(R.id.forgotem_code_view).text = login.getEmail()
+    }
+
+    private fun listen(view: View) {
         view.findViewById<Button>(R.id.forgotem_code_verification_button).setOnClickListener {
             findNavController().navigate(R.id.action_code_to_forgotem)
         }

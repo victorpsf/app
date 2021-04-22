@@ -1,11 +1,8 @@
 package com.example.cantinhodecoracao.Util
 
-import android.R.attr
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import java.io.*
-
 
 class Directory {
     private var file: File;

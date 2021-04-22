@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import org.json.JSONObject
 
-
 class Information {
     private var title: String = ""
     private var message: String = ""

@@ -34,6 +34,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_forgotem_input"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/email_login_input"

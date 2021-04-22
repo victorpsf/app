@@ -20,10 +20,10 @@ class Login {
     fun setCode(value: Int): Login { this.code = value; return this }
 
     fun setPropertiesUsingJSON(json: JSONObject): Login {
-        var email = JSONReader(json).read(arrayOf("email"))
-        var senha = JSONReader(json).read(arrayOf("senha"))
-        var confirm = JSONReader(json).read(arrayOf("confirm"))
-        var code = JSONReader(json).read(arrayOf("code"))
+        var email = JSONReader().read(json, arrayOf("email"))
+        var senha = JSONReader().read(json, arrayOf("senha"))
+        var confirm = JSONReader().read(json, arrayOf("confirm"))
+        var code = JSONReader().read(json, arrayOf("code"))
 
         if (email !== null && email is String) this.email = email
         if (senha !== null && senha is String) this.senha = senha

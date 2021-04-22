@@ -14,15 +14,34 @@ class Convert {
     }
 
     fun hexToByteArray(hexadecimal: String): ByteArray {
-        var arrayByte: ByteArray = ByteArray(hexadecimal.length / 2, { 0 })
+        var length: Int = hexadecimal.length
+        var count: Int = 0
+        var index: Int = 0
+        var arrayBytes: ByteArray = ByteArray(length / 2)
 
-        for (i in 0 until hexadecimal.length) {
-            val index = i * 2
-            val j: Int = hexadecimal.substring(index, index + 2).toInt(16)
-            arrayByte.set(i, j.toByte())
+        while(count <= length) {
+            var hex: String
+
+            if (count + 2 < length) {
+                hex = hexadecimal.substring(count, count + 2)
+            } else {
+                hex = hexadecimal.substring(count)
+            }
+
+
+            if (hex.isNullOrEmpty()) {
+                // nothing
+            } else {
+                var hexInt: Int = Integer.parseInt(hex, 16)
+                arrayBytes.set(index, hexInt.toByte())
+
+                index += 1
+            }
+
+            count += 2
         }
 
-        return arrayByte
+        return arrayBytes
     }
 
     fun stringToJSON(string: String): JSONObject {

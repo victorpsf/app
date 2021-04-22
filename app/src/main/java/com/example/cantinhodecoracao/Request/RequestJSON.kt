@@ -3,17 +3,14 @@ package com.example.cantinhodecoracao.Request
 import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import androidx.core.content.ContextCompat.getSystemService
-import com.android.volley.Request
-import com.android.volley.RequestQueue
+import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
 
 class RequestJSON {
-    private val baseURL: String = "http://192.168.90.103:81"
+    private val baseURL: String = "http://192.168.90.102"
     private var url: String = ""
     private var method: String = "get"
 
@@ -100,7 +97,8 @@ class RequestJSON {
     private fun getUrl(): String {
         val url: String = this.url
         this.url = ""
-        return url
+        var query: String = this.getQuery()
+        return this.baseURL + url + query
     }
 
     private fun getHeaders(headers: MutableMap<String, String>): MutableMap<String, String> {
@@ -114,26 +112,33 @@ class RequestJSON {
         return headers
     }
 
-
     fun call(context: Activity, listiner: (error: Exception?, result: JSONObject?) -> Unit) {
         val queue: RequestQueue = Volley.newRequestQueue(context)
 
-        val request = object : JsonObjectRequest(this.getMethod(), this.getUrl(), this.getBody(), fun(response) {
-            listiner(null, response)
-        }, fun(error) {
-            listiner(error, null)
-        }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                var params: MutableMap<String, String> = super.getHeaders()
-                if (params == null) params = mutableMapOf<String, String>()
-                return getHeaders(params)
+        val request = object : JsonObjectRequest(
+                this.getMethod(),
+                this.getUrl(),
+                this.getBody(),
+                fun(response) {
+                    queue.stop()
+                    listiner(null, response)
+                },
+                fun(error) {
+                    listiner(error, null)
+                }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    var params: MutableMap<String, String> = super.getHeaders()
+                    if (params.isEmpty()) params = mutableMapOf<String, String>()
+                    return getHeaders(params)
             }
         }
 
-        /*
-        request.setRetryPolicy(DefaultRetryPolicy() {
-        })
-         */
-        queue.add(request)
+        queue.add(
+                request.setRetryPolicy(DefaultRetryPolicy(
+                        30000,
+                        0,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+                )
+        )
     }
 }
