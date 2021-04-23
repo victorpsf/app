@@ -46,24 +46,18 @@ class MainController {
     private fun sync() {
         try {
             if (!(RequestJSON().connected(this.main_activity))) throw Exception("3")
-            this.callServerSync(fun () {
-                this.callAndSendTansferPublicKey(fun (response: JSONObject) {
+            this.callServerSync(this, fun () {
+                this.callAndSendTansferPublicKey(this, fun (response: JSONObject) {
                     this.importServerKey(response)
                 })
             })
         } catch(error: Exception) {
-            when(error.message.toString()) {
-                "1" -> { this.printErrorAndExit("Falha no inicio da sincronização", "Não foi possível concluir a sincronização", "Ok") }
-                "2" -> { this.printErrorAndExit("Falha no processo de sincronização", "Algo ocorreu inesperadamente", "Ok") }
-                "3" -> { this.printErrorAndExit("Conexão", "Celular sem conexão com internet", "Ok") }
-                "1233" -> { this.printErrorAndExit("conexão", "ocorreu um erro na conexão", "Ok") }
-                else -> { this.printErrorAndExit("problema interno", error.message.toString(), "Ok") }
-            }
+            this.printErrorAndExit("problema interno", error.message.toString(), "Ok")
         }
 
     }
 
-    private fun callServerSync(listiner: () -> Unit) {
+    private fun callServerSync(mainController: MainController, listiner: () -> Unit) {
         RequestJSON()
                 .setMethod("get")
                 .setUrl("/api/v1")
@@ -71,15 +65,15 @@ class MainController {
                         this.main_activity,
                         fun(error: Exception?, result: JSONObject?) {
                             if (error !== null) {
-                                Log.e("error", error.toString())
-                                throw Exception("1")
+                                mainController.printErrorAndExit("Falha no inicio da sincronização", "Não foi possível concluir a sincronização", "Ok")
+                            } else {
+                                listiner()
                             }
-                            listiner();
                         }
                 )
     }
 
-    private fun callAndSendTansferPublicKey(listiner: (json: JSONObject) -> Unit) {
+    private fun callAndSendTansferPublicKey(mainController: MainController ,listiner: (json: JSONObject) -> Unit) {
         RequestJSON()
                 .setMethod("post")
                 .setUrl("/api/v1")
@@ -87,8 +81,11 @@ class MainController {
                 .call(
                         this.main_activity,
                         fun (error: Exception?, result: JSONObject?) {
-                            if (error !== null) throw Exception("2")
-                            listiner(result as JSONObject)
+                            if (error !== null) {
+                                mainController.printErrorAndExit("Falha no processo de sincronização", "Algo ocorreu inesperadamente", "Ok")
+                            } else {
+                                listiner(result as JSONObject)
+                            }
                         }
                 )
     }

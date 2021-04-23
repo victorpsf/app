@@ -113,32 +113,36 @@ class RequestJSON {
     }
 
     fun call(context: Activity, listiner: (error: Exception?, result: JSONObject?) -> Unit) {
-        val queue: RequestQueue = Volley.newRequestQueue(context)
+        try {
+            val queue: RequestQueue = Volley.newRequestQueue(context)
 
-        val request = object : JsonObjectRequest(
-                this.getMethod(),
-                this.getUrl(),
-                this.getBody(),
-                fun(response) {
-                    queue.stop()
-                    listiner(null, response)
-                },
-                fun(error) {
-                    listiner(error, null)
-                }) {
+            val request = object : JsonObjectRequest(
+                    this.getMethod(),
+                    this.getUrl(),
+                    this.getBody(),
+                    fun(response) {
+                        queue.stop()
+                        listiner(null, response)
+                    },
+                    fun(error) {
+                        listiner(error, null)
+                    }) {
                 override fun getHeaders(): MutableMap<String, String> {
                     var params: MutableMap<String, String> = super.getHeaders()
                     if (params.isEmpty()) params = mutableMapOf<String, String>()
                     return getHeaders(params)
+                }
             }
-        }
 
-        queue.add(
-                request.setRetryPolicy(DefaultRetryPolicy(
-                        30000,
-                        0,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
-                )
-        )
+            queue.add(
+                    request.setRetryPolicy(DefaultRetryPolicy(
+                            30000,
+                            0,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+                    )
+            )
+        } catch (error: Exception) {
+            listiner(error, null)
+        }
     }
 }

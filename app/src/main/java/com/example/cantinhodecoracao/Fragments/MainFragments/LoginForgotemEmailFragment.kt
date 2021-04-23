@@ -68,10 +68,20 @@ class LoginForgotemEmailFragment : Fragment() {
                             fun (error: Exception?, result: JSONObject?) {
                                 loading.close()
                                 if (error !== null) {
-                                    Toast.makeText(this.model.getActivity(), "Não foi possível enviar código", Toast.LENGTH_LONG)
+                                    Information()
+                                            .setTitle("Error")
+                                            .setMessage("Não foi possível enviar código")
+                                            .setPositiveButtonLabel("Ok")
+                                            .show(this.model.getActivity(), fun(click: JSONObject) {
+                                            })
                                 } else {
-                                    Toast.makeText(this.model.getActivity(), "Código enviado", Toast.LENGTH_LONG)
-                                    findNavController().navigate(R.id.action_forgotem_email_to_code)
+                                    Information()
+                                            .setTitle("Success")
+                                            .setMessage("Código enviado")
+                                            .setPositiveButtonLabel("Ok")
+                                            .show(this.model.getActivity(), fun(click: JSONObject) {
+                                                findNavController().navigate(R.id.action_forgotem_email_to_code)
+                                            })
                                 }
                             }
                         )

@@ -2,6 +2,10 @@ const { Router } = require('squirrel_resource')
 const bodyparser = require('body-parser')
 
 module.exports = Router()
+  .use(function (req, res, next) {
+    console.log(`url: ${req.url} method: ${req.method}`)
+    next()
+  })
   .use(bodyparser.json())
   .use(bodyparser.urlencoded({ extended: true }))
   .responseHeaders({
@@ -17,8 +21,8 @@ module.exports = Router()
                .post('/auth', 'AuthController.js', 'login')
                .prefix('/forgotem', function (forgotem) {
                  return forgotem.post('/', 'AuthController.js', 'forgotem')
-                                .post('/code', 'AuthController.js', 'forgotemCode')
-                                .post('/change', 'AuthController.js', 'forgotemChange')
+                                .post('/code', 'AuthController.js', 'code')
+                                .post('/change', 'AuthController.js', 'change')
                })
     })
   })
