@@ -1,5 +1,6 @@
 package com.example.cantinhodecoracao
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
@@ -21,6 +22,22 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         MainController(this, this.model).load()
+    }
+
+    fun handlePage(token: String) {
+        val intent: Intent = Intent(this, PageActivity::class.java)
+
+        this.sharedProperties(intent)
+        // intent.putExtra()
+        this.startActivity(intent)
+    }
+
+    private fun sharedProperties(intent: Intent) {
+        /*
+        var keys = keys
+
+        intent.putExtra("privateKey", )
+         */
     }
 
     fun CloseApp() {

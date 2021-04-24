@@ -62,6 +62,10 @@
         android:name="com.example.cantinhodecoracao.Fragments.MainFragments.LoginCodeFragment"
         android:label="@string/code_forgotem_label"
         tools:layout="@layout/fragment_login_code">
+
+        <action
+            android:id="@+id/action_login_code_to_login"
+            app:destination="@id/LoginFragment"></action>
     </fragment>
 
     <fragment

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.cantinhodecoracao.Crypto.Crypto
+import com.example.cantinhodecoracao.Dialog.Loading
 import com.example.cantinhodecoracao.Models.Login
 import com.example.cantinhodecoracao.R
 import com.example.cantinhodecoracao.Request.RequestJSON
@@ -66,23 +67,24 @@ class LoginFragment : Fragment() {
                         .setPositiveButtonLabel("Ok")
                         .show(this.model.getActivity(), fun (result: JSONObject) {  })
             } else {
+                var loading: Loading = Loading(this.model.getActivity())
                 var jsonObject: JSONObject = JSONObject()
                 var loginModel: Login = this.model.getLogin()
+                loading.show()
 
                 loginModel.setEmail(email)
-                loginModel.setSenha(Crypto().hash(senha))
-
+                loginModel.setSenha(senha)
                 this.model.setLogin(loginModel)
 
-
                 jsonObject.put(this.model.encrypt("email"), this.model.encrypt(loginModel.getEmail()))
-                jsonObject.put(this.model.encrypt("senha"), this.model.encrypt(loginModel.getSenha()))
+                jsonObject.put(this.model.encrypt("senha"), this.model.encrypt(Crypto().hash(senha)))
 
                 RequestJSON()
-                        .setUrl("/api/v1/auth")
+                        .setUrl("/api/v1/auth/")
                         .setMethod("post")
                         .appendBody("login", jsonObject)
                         .call(this.model.getActivity(), fun (response: ResponseServer) {
+                            loading.close()
                             if (response.resultError()) {
                                 response.openDialog(
                                         this.model.getActivity(),
@@ -93,7 +95,16 @@ class LoginFragment : Fragment() {
                                         fun(click: JSONObject) { }
                                 )
                             } else {
-                                findNavController().navigate(R.id.action_login_to_code)
+                                response.openDialog(
+                                        this.model.getActivity(),
+                                        "Sucesso no login",
+                                        null,
+                                        "Ok",
+                                        null,
+                                        fun(click: JSONObject) {
+                                            findNavController().navigate(R.id.action_login_to_code)
+                                        }
+                                )
                             }
                         })
             }

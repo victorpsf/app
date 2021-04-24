@@ -87,15 +87,14 @@ module.exports = class AuthController extends AuthService {
         code: 'required|interger'
       })) return
 
+      let user = await this.getUser(decryptedData)
       if (this.validatePassword(user, decryptedData)) return
-      let {
-        register,
-        user
-      } = await this.getCode('login', decryptedData, true)
+      let register = await this.getCode('login', decryptedData, false, user)
 
       if (this.validatePassword(user, decryptedData)) return
-      else if (this.validateCode(decryptedData, register)) return
+      else if (this.validateCode(register, decryptedData)) return
 
+      await register.delete()
       let token = this.jwt({ pid: user.id })
       return this.defaultResponseJSON({ code: 200, message: 'Autenticado', result: { token } });
     } catch (error) {

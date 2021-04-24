@@ -2,7 +2,7 @@ const BaseModel = require('./BaseModel.js')
 
 module.exports = class AuthenticationcodeModel extends BaseModel {
   // table name
-  table = ''
+  table = 'authentication_code'
   fields = {
     id: {
       type: this.DataTypes.INTERGER,
