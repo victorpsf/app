@@ -5,8 +5,8 @@ import com.example.cantinhodecoracao.Crypto.RSA
 import com.example.cantinhodecoracao.Dialog.Loading
 import com.example.cantinhodecoracao.MainActivity
 import com.example.cantinhodecoracao.Models.Login
-import com.example.cantinhodecoracao.R
 import com.example.cantinhodecoracao.Request.RequestJSON
+import com.example.cantinhodecoracao.Request.ResponseServer
 import com.example.cantinhodecoracao.Util.Convert
 import com.example.cantinhodecoracao.Util.Directory
 import com.example.cantinhodecoracao.Util.Information
@@ -63,9 +63,16 @@ class MainController {
                 .setUrl("/api/v1")
                 .call(
                         this.main_activity,
-                        fun(error: Exception?, result: JSONObject?) {
-                            if (error !== null) {
-                                mainController.printErrorAndExit("Falha no inicio da sincronização", "Não foi possível concluir a sincronização", "Ok")
+                        fun (response: ResponseServer) {
+                            if (response.resultError()) {
+                                response.openDialog(
+                                        mainController.main_activity,
+                                        "Falha no inicio da sincronização",
+                                        "Não foi possível concluir a sincronização",
+                                        "Ok",
+                                        null,
+                                        fun (click: JSONObject) {}
+                                )
                             } else {
                                 listiner()
                             }
@@ -80,26 +87,34 @@ class MainController {
                 .appendBody("publicKey", this.keys.get("publicKey"))
                 .call(
                         this.main_activity,
-                        fun (error: Exception?, result: JSONObject?) {
-                            if (error !== null) {
-                                mainController.printErrorAndExit("Falha no processo de sincronização", "Algo ocorreu inesperadamente", "Ok")
+                        fun (response: ResponseServer) {
+                            if (response.resultError()) {
+                                response.openDialog(
+                                        mainController.main_activity,
+                                        "Falha no processo de sincronização",
+                                        "Algo ocorreu inesperadamente",
+                                        "Ok",
+                                        null,
+                                        fun (click: JSONObject) {}
+                                )
                             } else {
-                                listiner(result as JSONObject)
+                                listiner(response.getResult() as JSONObject)
                             }
                         }
                 )
     }
 
     fun importServerKey(result: JSONObject) {
-        var serverPublicKeyString: Any = JSONReader().read(result, arrayOf("result", "publicKey"))
+        var serverPublicKeyString: Any = result.get("publicKey")
 
         try {
+            if (serverPublicKeyString == null) throw Exception("")
             var serverPublicKey: PublicKey = this.rsa.importPublicKey(serverPublicKeyString as String)
 
             this.keys.put("serverPublicKey", Convert().byteArrayToHex(serverPublicKey.encoded))
             this.loginViewModel.setKeys(this.keys)
         } catch (error: Exception) {
-            return this.printErrorAndExit("falha na importação da chave", "sem importar chave criptografia não ocorre", "Ok")
+            return this.printErrorAndExit("falha na importação da chave", "sem importar chave, criptografia não ocorre.", "Ok")
         }
 
         this.loading.close()

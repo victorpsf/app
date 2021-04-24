@@ -112,7 +112,7 @@ class RequestJSON {
         return headers
     }
 
-    fun call(context: Activity, listiner: (error: Exception?, result: JSONObject?) -> Unit) {
+    fun call(context: Activity, listiner: (response: ResponseServer) -> Unit) {
         try {
             val queue: RequestQueue = Volley.newRequestQueue(context)
 
@@ -120,29 +120,23 @@ class RequestJSON {
                     this.getMethod(),
                     this.getUrl(),
                     this.getBody(),
-                    fun(response) {
-                        queue.stop()
-                        listiner(null, response)
-                    },
-                    fun(error) {
-                        listiner(error, null)
-                    }) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    var params: MutableMap<String, String> = super.getHeaders()
-                    if (params.isEmpty()) params = mutableMapOf<String, String>()
-                    return getHeaders(params)
-                }
-            }
+                    fun(response) { listiner(ResponseServer(response, null)) },
+                    fun(error)    { listiner(ResponseServer(null, error)) })
+                    {
+                        override fun getHeaders(): MutableMap<String, String> {
+                            var params: MutableMap<String, String> = super.getHeaders()
+                            if (params.isEmpty()) params = mutableMapOf<String, String>()
+                            return getHeaders(params)
+                        }
+                    }
 
             queue.add(
                     request.setRetryPolicy(DefaultRetryPolicy(
-                            30000,
+                            60000,
                             0,
                             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
                     )
             )
-        } catch (error: Exception) {
-            listiner(error, null)
-        }
+        } catch (error: Exception) { listiner(ResponseServer(null, error)) }
     }
 }

@@ -16,6 +16,7 @@ import com.example.cantinhodecoracao.Dialog.Loading
 import com.example.cantinhodecoracao.Models.Login
 import com.example.cantinhodecoracao.R
 import com.example.cantinhodecoracao.Request.RequestJSON
+import com.example.cantinhodecoracao.Request.ResponseServer
 import com.example.cantinhodecoracao.Util.Information
 import com.example.cantinhodecoracao.ViewModels.LoginViewModel
 import org.json.JSONObject
@@ -65,19 +66,24 @@ class LoginForgotemCodeFragment: Fragment() {
                     .setUrl("/api/v1/forgotem/code")
                     .setMethod("post")
                     .appendBody("forgotem", jsonObject)
-                    .call(this.model.getActivity(), fun(error: Exception?, result: JSONObject?) {
-                        loading.close()
-                        if (error !== null) {
-                            Information()
-                                    .setTitle("Error")
-                                    .setMessage("Código inválido")
-                                    .setPositiveButtonLabel("Ok")
-                                    .show(this.model.getActivity(), fun(click: JSONObject) {
-                                    })
-                        } else {
-                            findNavController().navigate(R.id.action_code_to_forgotem)
-                        }
-                    })
+                    .call(
+                            this.model.getActivity(),
+                            fun (response: ResponseServer) {
+                                loading.close()
+                                if (response.resultError()) {
+                                    response.openDialog(
+                                            this.model.getActivity(),
+                                            "Error",
+                                            null,
+                                            "OK",
+                                            null,
+                                            fun (click: JSONObject) {}
+                                    )
+                                } else {
+                                    findNavController().navigate(R.id.action_code_to_forgotem)
+                                }
+                            }
+                    )
         }
     }
 }

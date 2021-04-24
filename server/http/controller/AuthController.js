@@ -3,106 +3,128 @@ const AuthService = require('../service/AuthService.js')
 module.exports = class AuthController extends AuthService {
   constructor(request, response) { super(request, response) }
 
-  async code() {
+  async forgotemPasswordChangeCode() {
     let all = this.all()
-    let validator = this.Validator.make(all, {
-      forgotem: 'required|object'
-    })
+
+    if (this.defaultVerificationRequest(all, 'forgotem')) return
 
     try {
-      if (validator.fails()) return this.defaultResponseJSON(validator.errorResult())
-      var object = await this.decryptObject(all['forgotem'])
+      var decryptedData = await this.decryptObject(all['forgotem'])
 
-      let internalValidator = this.Validator.make(object, {
-        email: 'required|email',
+      if (this.validateRequest(decryptedData, {
         code: 'required|interger'
-      })
+      })) return
 
-      if (internalValidator.fails()) return this.defaultResponseJSON(internalValidator.errorResult(), 400)
+      let register = await this.getCode('forgotem', decryptedData)
+      if (this.validateCode(register, decryptedData)) return
 
-      let register = await this.getCode('forgotem', object)
-
-      if (register.code != object.code) 
-        return this.defaultResponseJSON({ code: 200, message: 'invalid code' }, 400);
-
-        return this.defaultResponseJSON({ code: 200, message: 'success response' });
+      return this.defaultResponseJSON({ code: 200, message: 'Código válido' });
     } catch (error) {
-      return this.defaultResponseJSON({ code: 200, message: 'internal server error' }, 500);
+      if (error.request && error.code) return this.defaultResponseJSON(error.request, error.code);
+      else return this.defaultResponseJSON({ code: 500, message: 'internal server error' }, 200);
     }
   }
 
-  async change() {
+  async forgotemPasswordChange() {
     let all = this.all()
-    let validator = this.Validator.make(all, {
-      forgotem: 'required|object'
-    })
+    if (this.defaultVerificationRequest(all, 'forgotem')) return
 
     try {
-      if (validator.fails()) return this.defaultResponseJSON(validator.errorResult())
-      var object = await this.decryptObject(all['forgotem'])
+      var decryptedData = await this.decryptObject(all['forgotem'])
 
-      let internalValidator = this.Validator.make(object, {
-        email: 'required|email',
+      if (this.validateRequest(decryptedData, {
         code: 'required|interger',
         senha: 'required|string',
         confirm: 'required|string'
-      })
+      })) return
 
-      if (internalValidator.fails()) return this.defaultResponseJSON(internalValidator.errorResult(), 400)
+      let {
+        register,
+        user
+      } = await this.getCode('forgotem', decryptedData, true)
 
-      let register = await this.getCode('forgotem', object)
+      if (this.validateCode(register, decryptedData)) return
+      else if (this.validatePasswordChange(decryptedData)) return
 
-      if (register.code != object.code) {
-        return this.defaultResponseJSON({ code: 200, message: 'invalid code' }, 400);
-      } else if (object.senha != object.confirm) {
-        return this.defaultResponseJSON({ code: 200, message: 'invalid values' }, 400);
-      }
+      user.senha = decryptedData.senha
 
-      let user = await register.user()
-      user.senha = this.Crypto.Hash().update(object.senha)
-
-      await Promise.all([
-        user.save(),
-        register.delete()
-      ])
-
-      return this.defaultResponseJSON({ code: 200, message: 'success response' });
+      await Promise.all([ user.save(), register.delete() ])
+      return this.defaultResponseJSON({ code: 200, message: 'Senha alterada' });
     } catch (error) {
-      return this.defaultResponseJSON({ code: 200, message: 'internal server error' }, 500);
+      if (error.request && error.code) return this.defaultResponseJSON(error.request, error.code)
+      else return this.defaultResponseJSON({ code: 500, message: 'internal server error' }, 200);
     }
   }
 
-  async forgotem() {
+  async userForgotem() {
     let all = this.all()
-    let validator = this.Validator.make(all, {
-      forgotem: 'required|object'
-    })
+    if (this.defaultVerificationRequest(all, 'forgotem')) return
 
     try {
-      if (validator.fails()) return this.defaultResponseJSON(validator.errorResult(), 400)
-      var object = await this.decryptObject(all['forgotem'])
+      var decryptedData = await this.decryptObject(all['forgotem'])
 
-      let internalValidator = this.Validator.make(object, {
-        email: 'required|email'
-      })
+      if (this.validateRequest(decryptedData)) return
 
-      if (internalValidator.fails()) return this.defaultResponseJSON(internalValidator.errorResult(), 400)
+      let register = await this.getCode('forgotem', decryptedData)
+      await this.sendMail('forgotem', decryptedData, register)
 
-      let register = await this.getCode('forgotem', object)
-      let date = new Date()
-
-      // await this.Smtp.setReceiver(object.email)
-      //          .setSubject(`Solicitação de alteração: ${date.toLocaleString()}`)
-      //          .setHtml('sendCodeForgotem.html', [[/\[CODE\]/g, `${register.code}`]])
-      //          .send()
-
-      return this.defaultResponseJSON({ code: 200, message: 'success' });
+      return this.defaultResponseJSON({ code: 200, message: 'Código enviado' });
     } catch (error) {
-      return this.defaultResponseJSON({ code: 200, message: 'internal server error' }, 500);
+      if (error.request && error.code) return this.defaultResponseJSON(error.request, error.code)
+      else return this.defaultResponseJSON({ code: 500, message: 'internal server error' }, 200);
     }
   }
 
-  async login() {
+  async userLoginCode() {
+    let all = this.all()
+    if (this.defaultVerificationRequest(all, 'login')) return
 
+    try {
+      let decryptedData = await this.decryptObject(all['login'])
+
+      if (this.validateRequest(decryptedData, {
+        senha: 'required|string',
+        code: 'required|interger'
+      })) return
+
+      if (this.validatePassword(user, decryptedData)) return
+      let {
+        register,
+        user
+      } = await this.getCode('login', decryptedData, true)
+
+      if (this.validatePassword(user, decryptedData)) return
+      else if (this.validateCode(decryptedData, register)) return
+
+      let token = this.jwt({ pid: user.id })
+      return this.defaultResponseJSON({ code: 200, message: 'Autenticado', result: { token } });
+    } catch (error) {
+      if (error.request && error.code) return this.defaultResponseJSON(error.request, error.code)
+      else return this.defaultResponseJSON({ code: 500, message: 'internal server error' }, 200);
+    }
+  }
+
+  async userLogin() {
+    let all = this.all()
+    if (this.defaultVerificationRequest(all, 'login')) return
+
+    try {
+      let decryptedData = await this.decryptObject(all['login'])
+
+      if (this.validateRequest(decryptedData, {
+        senha: 'required|string'
+      })) return
+
+      let user = await this.getUser(decryptedData)
+
+      if (this.validatePassword(user, decryptedData)) return
+      let register = await this.getCode('login', decryptedData, false, user)
+      await this.sendMail('login', decryptedData, register)
+
+      return this.defaultResponseJSON({ code: 200, message: 'Código enviado' });
+    } catch (error) {
+      if (error.request && error.code) return this.defaultResponseJSON(error.request, error.code)
+      else return this.defaultResponseJSON({ code: 200, message: 'internal server error' }, 500);
+    }
   }
 }

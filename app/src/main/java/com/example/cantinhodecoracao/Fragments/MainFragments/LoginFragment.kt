@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.cantinhodecoracao.Crypto.Crypto
 import com.example.cantinhodecoracao.Models.Login
 import com.example.cantinhodecoracao.R
+import com.example.cantinhodecoracao.Request.RequestJSON
+import com.example.cantinhodecoracao.Request.ResponseServer
 import com.example.cantinhodecoracao.Util.Directory
 import com.example.cantinhodecoracao.Util.Information
 import com.example.cantinhodecoracao.Util.JSONReader
@@ -64,14 +66,36 @@ class LoginFragment : Fragment() {
                         .setPositiveButtonLabel("Ok")
                         .show(this.model.getActivity(), fun (result: JSONObject) {  })
             } else {
+                var jsonObject: JSONObject = JSONObject()
                 var loginModel: Login = this.model.getLogin()
 
                 loginModel.setEmail(email)
                 loginModel.setSenha(Crypto().hash(senha))
 
                 this.model.setLogin(loginModel)
-                        .getActivity()
-                        .singIn(loginModel)
+
+
+                jsonObject.put(this.model.encrypt("email"), this.model.encrypt(loginModel.getEmail()))
+                jsonObject.put(this.model.encrypt("senha"), this.model.encrypt(loginModel.getSenha()))
+
+                RequestJSON()
+                        .setUrl("/api/v1/auth")
+                        .setMethod("post")
+                        .appendBody("login", jsonObject)
+                        .call(this.model.getActivity(), fun (response: ResponseServer) {
+                            if (response.resultError()) {
+                                response.openDialog(
+                                        this.model.getActivity(),
+                                        "Falha no login",
+                                        null,
+                                        "Ok",
+                                        null,
+                                        fun(click: JSONObject) { }
+                                )
+                            } else {
+                                findNavController().navigate(R.id.action_login_to_code)
+                            }
+                        })
             }
         }
     }

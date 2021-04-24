@@ -18,11 +18,14 @@ module.exports = Router()
     return api.prefix('/v1', function (v1) {
       return v1.get('/', 'SyncController.js', 'get')
                .post('/', 'SyncController.js', 'post')
-               .post('/auth', 'AuthController.js', 'login')
+               .prefix('/auth', function (auth) {
+                 return auth.post('/', 'AuthController.js', 'userLogin')
+                            .post('/code', 'AuthController.js', 'userLoginCode')
+               })
                .prefix('/forgotem', function (forgotem) {
-                 return forgotem.post('/', 'AuthController.js', 'forgotem')
-                                .post('/code', 'AuthController.js', 'code')
-                                .post('/change', 'AuthController.js', 'change')
+                 return forgotem.post('/', 'AuthController.js', 'userForgotem')
+                                .post('/code', 'AuthController.js', 'forgotemPasswordChangeCode')
+                                .post('/change', 'AuthController.js', 'forgotemPasswordChange')
                })
     })
   })

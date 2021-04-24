@@ -13,6 +13,7 @@ import com.example.cantinhodecoracao.Crypto.RSA
 import com.example.cantinhodecoracao.Dialog.Loading
 import com.example.cantinhodecoracao.R
 import com.example.cantinhodecoracao.Request.RequestJSON
+import com.example.cantinhodecoracao.Request.ResponseServer
 import com.example.cantinhodecoracao.Util.Information
 import com.example.cantinhodecoracao.ViewModels.LoginViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -65,23 +66,28 @@ class LoginForgotemEmailFragment : Fragment() {
                         .appendBody("forgotem", jsonObject)
                         .call(
                             this.model.getActivity(),
-                            fun (error: Exception?, result: JSONObject?) {
+                            fun (response: ResponseServer) {
                                 loading.close()
-                                if (error !== null) {
-                                    Information()
-                                            .setTitle("Error")
-                                            .setMessage("Não foi possível enviar código")
-                                            .setPositiveButtonLabel("Ok")
-                                            .show(this.model.getActivity(), fun(click: JSONObject) {
-                                            })
+                                if (response.resultError()) {
+                                    response.openDialog(
+                                            this.model.getActivity(),
+                                            "Não foi possível enviar código",
+                                            null,
+                                            "Ok",
+                                            null,
+                                            fun (click: JSONObject) {}
+                                    )
                                 } else {
-                                    Information()
-                                            .setTitle("Success")
-                                            .setMessage("Código enviado")
-                                            .setPositiveButtonLabel("Ok")
-                                            .show(this.model.getActivity(), fun(click: JSONObject) {
+                                    response.openDialog(
+                                            this.model.getActivity(),
+                                            "Sucesso",
+                                            "Código enviado",
+                                            "Ok",
+                                            null,
+                                            fun (click: JSONObject) {
                                                 findNavController().navigate(R.id.action_forgotem_email_to_code)
-                                            })
+                                            }
+                                    )
                                 }
                             }
                         )

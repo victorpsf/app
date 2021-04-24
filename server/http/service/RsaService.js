@@ -1,5 +1,6 @@
 const { BaseController, Storage } = require('squirrel_resource')
 const NodeRSA = require('node-rsa')
+const JWT = require('jsonwebtoken')
 
 module.exports = class RsaService extends BaseController {
   _storage = new Storage()
@@ -178,5 +179,9 @@ module.exports = class RsaService extends BaseController {
     }
 
     return json
+  }
+
+  jwt(data) {
+    return JWT.sign(data, this.request.secret(), { expiresIn: 86400 })
   }
 }
