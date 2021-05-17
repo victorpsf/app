@@ -57,6 +57,8 @@ class LoginFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
+            findNavController().navigate(R.id.action_login_to_code)
+            /*
             var email = view.findViewById<TextInputEditText>(R.id.inputEmail).text.toString()
             var senha = view.findViewById<TextInputEditText>(R.id.inputSenha).text.toString()
 
@@ -108,6 +110,8 @@ class LoginFragment : Fragment() {
                             }
                         })
             }
+
+             */
         }
     }
 }

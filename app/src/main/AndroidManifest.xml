@@ -14,10 +14,7 @@
         android:theme="@style/Theme.CantinhoDeCoracao"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".PageActivity"
-            android:label="@string/title_activity_page"
-            android:theme="@style/Theme.CantinhoDeCoracao.NoActionBar"></activity>
-        <activity
+            android:noHistory="true"
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CantinhoDeCoracao.NoActionBar">
@@ -26,6 +23,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:noHistory="false"
+            android:name=".PageActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CantinhoDeCoracao.NoActionBar">
         </activity>
     </application>
 

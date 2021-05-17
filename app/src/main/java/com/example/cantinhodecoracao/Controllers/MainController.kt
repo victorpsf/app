@@ -1,46 +1,37 @@
 package com.example.cantinhodecoracao.Controllers
 
-import android.util.Log
-import com.example.cantinhodecoracao.Crypto.RSA
-import com.example.cantinhodecoracao.Dialog.Loading
 import com.example.cantinhodecoracao.MainActivity
 import com.example.cantinhodecoracao.Models.Login
 import com.example.cantinhodecoracao.Request.RequestJSON
 import com.example.cantinhodecoracao.Request.ResponseServer
 import com.example.cantinhodecoracao.Util.Convert
-import com.example.cantinhodecoracao.Util.Directory
 import com.example.cantinhodecoracao.Util.Information
-import com.example.cantinhodecoracao.Util.JSONReader
 import com.example.cantinhodecoracao.ViewModels.LoginViewModel
 import org.json.JSONObject
 import java.security.PublicKey
+import com.example.cantinhodecoracao.Controllers.BaseController
 
-class MainController {
-    private var main_activity: MainActivity
-    private var loading: Loading
-    private var keys: JSONObject = JSONObject()
-    private var directory: Directory;
-    private var loginViewModel: LoginViewModel
-    private var rsa: RSA = RSA()
+class MainController(mainActivity: MainActivity, model: LoginViewModel): BaseController(mainActivity, JSONObject()) {
+    private var main_activity = mainActivity
+    public var loginViewModel: LoginViewModel = model
 
-    constructor(mainActivity: MainActivity, model: LoginViewModel) {
-        this.main_activity = mainActivity
-        this.directory = Directory(this.main_activity)
-        this.loading = Loading(this.main_activity)
-        this.loginViewModel = model
+    fun load() {
+        this.loginViewModel = this.loginViewModel
                 .setActivity(this.main_activity)
                 .setController(this)
                 .setLogin(Login())
                 .setMainController(this)
-    }
 
-    fun load() {
         this.loading.show()
         this.generateKeys()
 
         this.loginViewModel.setKeys(this.keys)
 
         this.sync()
+    }
+
+    fun getKeysString(): String {
+        return this.keys.toString()
     }
 
     private fun sync() {

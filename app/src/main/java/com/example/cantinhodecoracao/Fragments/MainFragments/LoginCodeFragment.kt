@@ -43,6 +43,9 @@ class LoginCodeFragment: Fragment() {
 
     private fun listen(view: View) {
         view.findViewById<Button>(R.id.code_login_verification_button).setOnClickListener {
+            findNavController().navigate(R.id.action_login_code_to_login)
+            this.model.getActivity().handlePage("", this.model.getMainController().getKeysString())
+            /*
             val loading: Loading = Loading(this.model.getActivity())
             loading.show()
             var codeString: String = view.findViewById<EditText>(R.id.code_login_input).text.toString()
@@ -93,12 +96,16 @@ class LoginCodeFragment: Fragment() {
                                         "Ok",
                                         null,
                                         fun (click: JSONObject) {
-                                            this.model.getActivity().handlePage(token)
+                                            findNavController().navigate(R.id.action_login_code_to_login)
+                                            this.model.getActivity().handlePage(token, this.model.getMainController().getKeysString())
                                         }
                                 )
                             }
                         }
                     })
+        }
+
+             */
         }
     }
 }

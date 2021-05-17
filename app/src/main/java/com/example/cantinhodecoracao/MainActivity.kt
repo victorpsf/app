@@ -5,15 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
 import com.example.cantinhodecoracao.Controllers.MainController
-import com.example.cantinhodecoracao.Models.Login
-import com.example.cantinhodecoracao.Request.RequestJSON
-import com.example.cantinhodecoracao.Request.ResponseServer
-import com.example.cantinhodecoracao.Util.Information
 import com.example.cantinhodecoracao.ViewModels.LoginViewModel
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private val model: LoginViewModel by viewModels()
+    private var mainController: MainController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,22 +17,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        MainController(this, this.model).load()
+        this.mainController = MainController(this, this.model)
+
+        this.model.setActivity(this).setMainController(this.mainController as MainController)
+        //this.mainController?.load()
     }
 
-    fun handlePage(token: String) {
+    fun handlePage(token: String, keys: String) {
         val intent: Intent = Intent(this, PageActivity::class.java)
-
-        this.sharedProperties(intent)
-        // intent.putExtra()
+        //this.sharedProperties(intent, token, keys)
         this.startActivity(intent)
     }
 
-    private fun sharedProperties(intent: Intent) {
+    private fun sharedProperties(intent: Intent, token: String, keys: String) {
         /*
-        var keys = keys
-
-        intent.putExtra("privateKey", )
+        intent.putExtra("token", token)
+        intent.putExtra("keys", keys)
          */
     }
 

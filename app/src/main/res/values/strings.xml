@@ -22,6 +22,25 @@
     <string name="code_forgotem_button">Verificar</string>
     <string name="confirm_forgotem_button">Alterar</string>
 
+
+    <string name="client_text_view">Cliente</string>
+    <string name="client_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro do cliente.</string>
+
+    <string name="localization_text_view">Localização</string>
+    <string name="localization_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro da localização.</string>
+
+    <string name="contact_text_view">Contato</string>
+    <string name="contact_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro do contato.</string>
+
+    <string name="event_text_view">Evento</string>
+    <string name="event_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro do Evento.</string>
+
+    <string name="inventory_text_view">Inventario</string>
+    <string name="inventory_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro do inventario.</string>
+
+    <string name="financial_text_view">Financeiro</string>
+    <string name="financial_information_view">Cadastro, alteração, visualização, tudo que possa influir diretamente no registro do financeiro.</string>
+
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

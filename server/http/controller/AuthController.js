@@ -94,7 +94,7 @@ module.exports = class AuthController extends AuthService {
       if (this.validatePassword(user, decryptedData)) return
       else if (this.validateCode(register, decryptedData)) return
 
-      await register.delete()
+      // await register.delete()
       let token = this.jwt({ pid: user.id })
       return this.defaultResponseJSON({ code: 200, message: 'Autenticado', result: { token } });
     } catch (error) {
@@ -118,7 +118,7 @@ module.exports = class AuthController extends AuthService {
 
       if (this.validatePassword(user, decryptedData)) return
       let register = await this.getCode('login', decryptedData, false, user)
-      await this.sendMail('login', decryptedData, register)
+      // await this.sendMail('login', decryptedData, register)
 
       return this.defaultResponseJSON({ code: 200, message: 'Código enviado' });
     } catch (error) {
